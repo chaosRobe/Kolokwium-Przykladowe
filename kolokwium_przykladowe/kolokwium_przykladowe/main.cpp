@@ -1,4 +1,5 @@
-//#include 
+#include <iostream>
+using namespace std;
 class Klient
 {
 protected:
@@ -11,7 +12,9 @@ protected:
 	double stan_konta;
 	bool stan_aktywnosci; //hmm
 	Klient* wlasciciel;
+	
 public:
+	static int liczba_instancji;
 	Konto_Bankowe()
 	{
 		for (int i = 0; i < 26; i++)
@@ -21,14 +24,7 @@ public:
 		stan_konta = 0;
 		stan_aktywnosci = false;
 		wlasciciel = nullptr;
-	}
-	void set_numer_konta(unsigned int id[26])
-	{
-		for (int i = 0; i < 26; i++)
-		{
-			if(id[i]>9) numer_konta[i] = 9;
-			else numer_konta[i] = id[i];
-		}
+		liczba_instancji++;
 	}
 	Konto_Bankowe(unsigned int id[26], double $, bool stan, Klient* klient)
 	{
@@ -40,6 +36,19 @@ public:
 		stan_konta = $;
 		stan_aktywnosci = stan;
 		wlasciciel = klient;
+		liczba_instancji++;
+	}
+	~Konto_Bankowe()
+	{
+	liczba_instancji--;
+	}
+	void set_numer_konta(unsigned int id[26])
+	{
+		for (int i = 0; i < 26; i++)
+		{
+			if (id[i] > 9) numer_konta[i] = 9;
+			else numer_konta[i] = id[i];
+		}
 	}
 	void set_stan_konta(double $)
 	{
@@ -70,8 +79,13 @@ public:
 		return wlasciciel;
 	}
 };
+int Konto_Bankowe::liczba_instancji = 0;
 
 int main() 
 {
-
+	
+	{
+		Konto_Bankowe konto_test;
+		cout<<Konto_Bankowe::liczba_instancji;
+	}
 }
