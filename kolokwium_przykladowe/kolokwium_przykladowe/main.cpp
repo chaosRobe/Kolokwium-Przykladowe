@@ -16,6 +16,7 @@ public:
 	{
 		return nazwa;
 	}
+
 };
 class Konto_Bankowe 
 {
@@ -38,7 +39,7 @@ public:
 		wlasciciel = nullptr;
 		liczba_instancji++;
 	}
-	Konto_Bankowe(unsigned int id[26], double $, bool stan, Klient* klient)
+	Konto_Bankowe(int* id, double $, bool stan, Klient* klient)
 	{
 		for (int i = 0; i < 26; i++)
 		{
@@ -94,6 +95,20 @@ public:
 	{
 		return get_stan_konta();
 	}
+	operator double()
+	{
+		return stan_konta;
+	}
+	static Konto_Bankowe klient_to_konto(Klient& nowy)
+	{
+		int numer[26];
+		for (int i = 0; i < 26; i++)
+		{
+			numer[i] = rand() % 10;
+		}
+		//int* wsk = &numer[0];
+		Konto_Bankowe nowe(numer, 0, true, &nowy);
+	};
 };
 int Konto_Bankowe::liczba_instancji = 0;
 
@@ -119,7 +134,6 @@ public:
 
 int main() 
 {
-	
 	{
 		Konto_Bankowe konto_test;
 		Konto_Oszczednosciowe konto_test2;
