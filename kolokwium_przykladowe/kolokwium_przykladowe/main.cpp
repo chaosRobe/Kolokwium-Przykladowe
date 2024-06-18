@@ -2,12 +2,24 @@
 using namespace std;
 class Klient
 {
-protected:
+private:
 	char nazwa[25];
+public:
+	void set_nazwa(char le_tablica[25])
+	{
+		for (int i = 0; i < 25; i++)
+		{
+			nazwa[i] = le_tablica[i];
+		}
+	}
+	char* get_nazwa()
+	{
+		return nazwa;
+	}
 };
 class Konto_Bankowe 
 {
-protected:
+private:
 	unsigned int numer_konta[26];
 	double stan_konta;
 	bool stan_aktywnosci; //hmm
@@ -78,14 +90,43 @@ public:
 	{
 		return wlasciciel;
 	}
+	virtual double stan_konta_po_roku()
+	{
+		return get_stan_konta();
+	}
 };
 int Konto_Bankowe::liczba_instancji = 0;
+
+class Konto_Oszczednosciowe : public Konto_Bankowe
+{
+private:
+	int stopa_oprocentowania;
+public:
+	void set_stopa_oprocentowania(int wartosc)
+	{
+		if (wartosc < 0) stopa_oprocentowania = 0;
+		else stopa_oprocentowania = wartosc;
+	}
+	int get_stopa_oprocentowania()
+	{
+		return stopa_oprocentowania;
+	}
+	double stan_konta_po_roku() override
+	{
+		return get_stan_konta() * (1 + stopa_oprocentowania / 100.00);
+	}
+};
 
 int main() 
 {
 	
 	{
 		Konto_Bankowe konto_test;
-		cout<<Konto_Bankowe::liczba_instancji;
+		Konto_Oszczednosciowe konto_test2;
+		konto_test2.set_stan_konta(100);
+		konto_test2.set_stopa_oprocentowania(10);
+		cout<<konto_test2.stan_konta_po_roku();
+		//cout<<Konto_Bankowe::liczba_instancji;
 	}
+	//cout << Konto_Bankowe::liczba_instancji;
 }
