@@ -5,7 +5,7 @@ class Klient
 private:
 	char nazwa[25];
 public:
-	void set_nazwa(char le_tablica[25])
+	void set_nazwa(const char le_tablica[25])
 	{
 		for (int i = 0; i < 25; i++)
 		{
@@ -16,7 +16,13 @@ public:
 	{
 		return nazwa;
 	}
-
+	void wypisz() 
+	{
+		for (int i = 0; i < 25; i++)
+		{
+			cout<< nazwa[i];
+		}
+	}
 };
 class Konto_Bankowe 
 {
@@ -109,9 +115,37 @@ public:
 		//int* wsk = &numer[0];
 		Konto_Bankowe nowe(numer, 0, true, &nowy);
 	};
+	void operator+(double liczba)
+	{
+		stan_konta = stan_konta + liczba;
+	}
+	void wypiszNumer()
+	{
+		for (int i = 0; i < 26; i++)
+		{
+			cout << numer_konta[i];
+		}
+	}
 };
 int Konto_Bankowe::liczba_instancji = 0;
 
+std::ostream& operator<<(std::ostream& str, Konto_Bankowe& konto)
+{
+	if (konto.get_stan_aktywnosci() == true)
+	{
+		konto.wypiszNumer();
+		cout << " ";
+		konto.get_wlasciciel()->wypisz();
+		cout << " : ";
+		cout << konto.get_stan_konta();
+	}
+	else 
+	{
+		konto.wypiszNumer();
+		cout << " NIEAKTYWNE";
+	}
+	return str;
+}
 class Konto_Oszczednosciowe : public Konto_Bankowe
 {
 private:
@@ -135,11 +169,20 @@ public:
 int main() 
 {
 	{
+		Klient Nowy;
+		Nowy.set_nazwa("ni");
 		Konto_Bankowe konto_test;
 		Konto_Oszczednosciowe konto_test2;
 		konto_test2.set_stan_konta(100);
 		konto_test2.set_stopa_oprocentowania(10);
-		cout<<konto_test2.stan_konta_po_roku();
+		cout<<konto_test2.stan_konta_po_roku()<<endl;
+
+		konto_test2 + 1000.0;
+		konto_test2.set_wlasciciel(&Nowy);
+		cout<<konto_test2.get_stan_konta() << endl;
+		cout << konto_test2<<endl;
+		konto_test2.set_czy_aktywne(true);
+		cout << konto_test2;
 		//cout<<Konto_Bankowe::liczba_instancji;
 	}
 	//cout << Konto_Bankowe::liczba_instancji;
